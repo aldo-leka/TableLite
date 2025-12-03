@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { ErrorContext } from "better-auth/client";
 
 const loginSchema = z.object({
     email: z.email("Please enter a valid email address"),
@@ -66,7 +67,7 @@ export function LoginForm() {
             onSuccess: () => {
                 router.push("/");
             },
-            onError: (ctx) => {
+            onError: (ctx: ErrorContext) => {
                 toast.error(ctx.error.message);
             }
         });
