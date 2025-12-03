@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth';
 import { initTRPC, TRPCError } from '@trpc/server';
 import { headers } from 'next/headers';
 import { cache } from 'react';
+import prisma from '@/lib/prisma';
 export const createTRPCContext = cache(async () => {
     /**
      * @see: https://trpc.io/docs/server/context
@@ -37,3 +38,20 @@ export const protectedProcedure = baseProcedure.use(
 
         return next({ ctx: { ...ctx, auth: session } });
     });
+export const premiumProcedure = protectedProcedure.use(
+    async ({ ctx, next }) => {
+        const user = await prisma.user.findUniqueOrThrow({
+            where: { id: ctx.auth.user.id },
+            select: { paid: true },
+        });
+
+        if (!user.paid) {
+            throw new TRPCError({
+                code: "FORBIDDEN",
+                message: "Pro version required",
+            });
+        }
+
+        return next({ ctx });
+    }
+);

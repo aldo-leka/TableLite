@@ -2,8 +2,8 @@
 
 import {
     CalendarClockIcon,
-    CreditCardIcon,
     LogOutIcon,
+    Settings2Icon,
     StarIcon,
     UtensilsCrossedIcon
 } from "lucide-react";
@@ -22,6 +22,7 @@ import {
     SidebarMenuItem
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { useHasPurchased } from "@/features/payments/hooks/use-payment";
 
 const menuItems = [
     {
@@ -44,7 +45,7 @@ const menuItems = [
 export const AppSidebar = () => {
     const router = useRouter();
     const pathname = usePathname();
-    // const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
+    const { paid, isLoading } = useHasPurchased();
 
     return (
         <Sidebar collapsible="icon">
@@ -105,24 +106,32 @@ export const AppSidebar = () => {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
+                    {!paid && !isLoading && (
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                tooltip="Upgrade to Pro"
+                                className="gap-x-4 h-10 px-4"
+                                onClick={() => authClient.checkout({ slug: "TableLite-Pro" })}
+                            >
+                                <StarIcon className="h-4 w-4" />
+                                <span>Upgrade to Pro</span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    )}
                     <SidebarMenuItem>
                         <SidebarMenuButton
-                            tooltip="Updgrade to Pro"
+                            tooltip="Settings"
+                            isActive={pathname.startsWith("/settings")}
+                            asChild
                             className="gap-x-4 h-10 px-4"
-                            onClick={() => { }}
                         >
-                            <StarIcon className="h-4 w-4" />
-                            <span>Upgrade to Pro</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            tooltip="Billing Portal"
-                            className="gap-x-4 h-10 px-4"
-                            onClick={() => { }}
-                        >
-                            <CreditCardIcon className="h-4 w-4" />
-                            <span>Billing Portal</span>
+                            <Link
+                                href="/settings"
+                                prefetch
+                            >
+                                <Settings2Icon className="h-4 w-4" />
+                                <span>Settings</span>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
@@ -134,7 +143,7 @@ export const AppSidebar = () => {
                                     onSuccess: () => {
                                         router.push("/login");
                                     },
-                                },
+                                }
                             })}
                         >
                             <LogOutIcon className="h-4 w-4" />

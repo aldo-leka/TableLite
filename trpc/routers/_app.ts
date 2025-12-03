@@ -18,6 +18,17 @@ export const appRouter = createTRPCRouter({
 
             return { success: true, message: "Job queued" };
         }),
+    getPaymentStatus: protectedProcedure
+        .query(async ({ ctx }) => {
+            const user = await prisma.user.findUniqueOrThrow({
+                where: { id: ctx.auth.user.id },
+                select: { paid: true },
+            });
+
+            return {
+                paid: user.paid,
+            };
+        }),
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
