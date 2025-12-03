@@ -2,7 +2,7 @@ import { createAuthClient } from "better-auth/react";
 import { PolarEmbedCheckout } from "@polar-sh/checkout/embed";
 import type { BetterAuthClientPlugin } from "better-auth";
 import type { BetterFetchOption } from "better-auth/client";
-import type { CheckoutParams, polar } from "./index";
+import type { CheckoutParams, polar } from "@polar-sh/better-auth";
 // import { polarClient } from "@polar-sh/better-auth";
 
 // Copied from https://github.com/polarsource/polar-adapters/blob/main/packages/polar-betterauth/src/client.ts
