@@ -26,7 +26,7 @@ export const auth = betterAuth({
                 checkout({
                     products: [
                         {
-                            productId: "f7f691ee-f4cc-4235-b7c9-b7647d7d41a9",
+                            productId: process.env.POLAR_PRODUCT_ID as string,
                             slug: "TableLite-Pro"
                         }
                     ],
