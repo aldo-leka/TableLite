@@ -10,8 +10,6 @@ import { ErrorBoundary } from "react-error-boundary";
 const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     const auth = await requireAuth();
     const { slug } = await params;
-
-    // Get restaurant from slug
     const restaurant = await prisma.restaurant.findUnique({
         where: {
             slug,
