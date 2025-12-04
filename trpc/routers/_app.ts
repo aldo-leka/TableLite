@@ -1,34 +1,12 @@
-import { inngest } from '@/inngest/client';
-import { createTRPCRouter, protectedProcedure } from '../init';
-import prisma from '@/lib/prisma';
-import { email } from 'zod';
+import { paymentsRouter } from '@/features/payments/server/routers';
+import { createTRPCRouter } from '../init';
+import { restaurantsRouter } from '@/features/restaurants/server/routers';
+import { tablesRouter } from '@/features/tables/server/routers';
+
 export const appRouter = createTRPCRouter({
-    getWorkflows: protectedProcedure
-        .query(({ ctx }) => {
-            return prisma.workflow.findMany();
-        }),
-    createWorkflow: protectedProcedure
-        .mutation(async () => {
-            await inngest.send({
-                name: "test/hello.world",
-                data: {
-                    email: "aldo@aldo.al",
-                },
-            });
-
-            return { success: true, message: "Job queued" };
-        }),
-    getPaymentStatus: protectedProcedure
-        .query(async ({ ctx }) => {
-            const user = await prisma.user.findUniqueOrThrow({
-                where: { id: ctx.auth.user.id },
-                select: { paid: true },
-            });
-
-            return {
-                paid: user.paid,
-            };
-        }),
+    payments: paymentsRouter,
+    restaurants: restaurantsRouter,
+    tables: tablesRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;

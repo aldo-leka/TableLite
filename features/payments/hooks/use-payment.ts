@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const usePayment = () => {
     const trpc = useTRPC();
-    return useQuery(trpc.getPaymentStatus.queryOptions());
+    return useQuery(trpc.payments.getStatus.queryOptions());
 };
 
 export const useHasPurchased = () => {
