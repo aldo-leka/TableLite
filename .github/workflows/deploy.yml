@@ -52,7 +52,7 @@ jobs:
           provenance: false   # Speeds up build, disables unused attestation metadata
           sbom: false          # Skips SBOM generation (saves ~20–30s)
           build-args: |
-            BETTER_AUTH_SECRET=build_secret
+            BETTER_AUTH_SECRET=build_secretbuild_secretbuild_se
             GOOGLE_CLIENT_ID=placeholder
             GOOGLE_CLIENT_SECRET=placeholder
 

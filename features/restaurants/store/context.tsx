@@ -1,15 +1,7 @@
 "use client";
 
+import type { Restaurant } from "@/lib/generated/prisma/client";
 import { createContext, useContext } from "react";
-
-type Restaurant = {
-    id: string;
-    slug: string;
-    name: string;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-};
 
 const RestaurantContext = createContext<Restaurant | null>(null);
 

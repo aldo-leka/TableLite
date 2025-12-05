@@ -28,7 +28,7 @@ const Layout = async ({
     }
 
     return (
-        <RestaurantProvider restaurant={restaurant}>
+        <RestaurantProvider key={restaurant.id} restaurant={restaurant}>
             <SidebarProvider>
                 <AppSidebar />
                 <SidebarInset className="bg-accent/20">

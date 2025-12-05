@@ -65,6 +65,7 @@ export const AppSidebar = () => {
     const restaurant = useRestaurant();
     const { data: restaurants } = useSuspenseRestaurants();
     const menuItems = getMenuItems(restaurant.slug);
+    const { data: session } = authClient.useSession();
 
     return (
         <Sidebar collapsible="icon">
@@ -150,7 +151,7 @@ export const AppSidebar = () => {
                                     <div className="grid flex-1 text-left text-sm leading-tight">
                                         <span className="truncate font-medium">{restaurant.name}</span>
                                         <span className="truncate text-xs">
-                                            Email goes here
+                                            {session?.user.email}
                                         </span>
                                     </div>
                                     <ChevronDownIcon className="ml-auto size-4" />
@@ -181,7 +182,7 @@ export const AppSidebar = () => {
                                                 <div className="grid flex-1 text-left text-sm leading-tight">
                                                     <span className="truncate font-medium">{rest.name}</span>
                                                     <span className="truncate text-xs">
-                                                        Email goes here
+                                                        {session?.user.email}
                                                     </span>
                                                 </div>
                                             </Link>

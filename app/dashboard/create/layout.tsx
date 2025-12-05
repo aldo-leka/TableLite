@@ -1,10 +1,10 @@
-import { AuthLayout } from "@/features/auth/components/auth-layout";
+import { CreateLayout } from "@/features/restaurants/components/create-layout";
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
     return (
-        <AuthLayout>
+        <CreateLayout>
             {children}
-        </AuthLayout>
+        </CreateLayout>
     );
 };
 

@@ -7,7 +7,8 @@ export const tablesRouter = createTRPCRouter({
         .input(z.object({
             restaurantId: z.string(),
             name: z.string().min(1),
-            areaId: z.string().optional(),
+            maxGuests: z.number().int().min(1).max(20),
+            areaId: z.string().nullish(),
         }))
         .mutation(({ ctx, input }) => {
             // Makes sure restaurant belongs to user
@@ -21,6 +22,7 @@ export const tablesRouter = createTRPCRouter({
             return prisma.table.create({
                 data: {
                     name: input.name,
+                    maxGuests: input.maxGuests,
                     restaurantId: input.restaurantId,
                     areaId: input.areaId,
                 },
@@ -44,10 +46,12 @@ export const tablesRouter = createTRPCRouter({
                 },
             });
         }),
-    updateName: protectedProcedure
+    update: protectedProcedure
         .input(z.object({
             id: z.string(),
-            name: z.string().min(1)
+            name: z.string().min(1),
+            maxGuests: z.number().int().min(1).max(20),
+            areaId: z.string().nullish(),
         }))
         .mutation(({ ctx, input }) => {
             prisma.table.findUniqueOrThrow({
@@ -61,7 +65,11 @@ export const tablesRouter = createTRPCRouter({
 
             return prisma.table.update({
                 where: { id: input.id },
-                data: { name: input.name },
+                data: {
+                    name: input.name,
+                    maxGuests: input.maxGuests,
+                    areaId: input.areaId,
+                },
             });
         }),
     getOne: protectedProcedure
@@ -78,12 +86,16 @@ export const tablesRouter = createTRPCRouter({
         }),
     getMany: protectedProcedure
         .input(z.object({ restaurantId: z.string() }))
-        .query(({ ctx }) => {
+        .query(({ ctx, input }) => {
             return prisma.table.findMany({
                 where: {
+                    restaurantId: input.restaurantId,
                     restaurant: {
                         userId: ctx.auth.user.id,
                     },
+                },
+                include: {
+                    area: true,
                 },
             });
         }),

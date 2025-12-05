@@ -49,7 +49,7 @@ export function CreateForm() {
         trpc.restaurants.create.mutationOptions({
             onSuccess: (data) => {
                 toast.success(`Restaurant "${data.name}" created`);
-                router.push(`/dashboard/${data.slug}/reservations`);
+                router.push(`/dashboard/${data.slug}/tables`);
             },
             onError: (error) => {
                 toast.error(`Failed to create restaurant: ${error.message}`);
