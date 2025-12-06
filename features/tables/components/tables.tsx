@@ -131,7 +131,7 @@ export const Tables = () => {
                         <span className="absolute -top-3 left-4 bg-accent/20 px-2 text-base font-semibold">
                             {areaName}
                         </span>
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-4 lg:grid-cols-8 gap-4">
                             {tables.map((table) => (
                                 <TableCard
                                     key={table.id}
