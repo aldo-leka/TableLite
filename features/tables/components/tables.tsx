@@ -16,11 +16,14 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { PackageOpenIcon, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useRestaurant } from "@/features/restaurants/store/context";
 import { useState } from "react";
 import { Modal } from "./modal";
 import type { Table } from "@/lib/generated/prisma/client";
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent
+} from "@/components/ui/tooltip";
 
 export const TablesContainer = ({
     children
@@ -46,16 +49,25 @@ export const TablesError = () => {
 
 const TableCard = ({ table, onClick }: { table: Table; onClick: () => void }) => {
     return (
-        <button
-            onClick={onClick}
-            className="bg-muted rounded-lg aspect-square flex flex-col items-center justify-center relative hover:bg-muted/80 transition-colors p-4"
-        >
-            <span className="text-xl font-semibold">{table.name}</span>
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 text-xs">
-                <span>{table.maxGuests}</span>
-                <Users className="size-4" />
-            </div>
-        </button>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <button
+                    onClick={onClick}
+                    className="bg-muted rounded-lg aspect-square w-full max-w-24 flex flex-col items-center justify-center relative hover:bg-muted/80 transition-colors p-4"
+                >
+                    <span className="text-lg font-semibold truncate w-full text-center px-1">
+                        {table.name}
+                    </span>
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1 text-xs">
+                        <span>{table.maxGuests}</span>
+                        <Users className="size-4" />
+                    </div>
+                </button>
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>{table.name}</p>
+            </TooltipContent>
+        </Tooltip>
     );
 };
 
@@ -116,7 +128,7 @@ export const Tables = () => {
             <div>
                 {Object.entries(groupedTables).map(([areaKey, { areaName, tables }]) => (
                     <div key={areaKey} className="border border-dashed rounded-lg p-6 pt-8 relative">
-                        <span className="absolute -top-3 left-4 bg-background px-2 text-base font-semibold">
+                        <span className="absolute -top-3 left-4 bg-accent/20 px-2 text-base font-semibold">
                             {areaName}
                         </span>
                         <div className="grid grid-cols-4 gap-4">
@@ -129,7 +141,7 @@ export const Tables = () => {
                             ))}
                             <button
                                 onClick={() => handleAddTable(areaKey === "unassigned" ? null : areaKey)}
-                                className="border-2 border-dashed rounded-lg aspect-square flex items-center justify-center hover:bg-accent transition-colors"
+                                className="border-2 border-dashed rounded-lg aspect-square w-full max-w-24 max-h-24 flex items-center justify-center hover:bg-accent transition-colors"
                             >
                                 <span className="text-4xl font-light">+</span>
                             </button>
@@ -170,7 +182,7 @@ export const TablesEmpty = () => {
                 </EmptyDescription>
                 <EmptyContent>
                     <button
-                        className="p-6 border-2 border-dashed rounded-lg aspect-square flex items-center justify-center hover:bg-accent transition-colors"
+                        className="p-6 border-2 border-dashed rounded-lg aspect-square max-w-24 max-h-24 flex items-center justify-center hover:bg-accent transition-colors"
                         onClick={() => setOpenModal(true)}
                     >
                         <span className="text-4xl font-light">+</span>

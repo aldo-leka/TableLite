@@ -4,11 +4,9 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +34,7 @@ import { useRestaurant } from "@/features/restaurants/store/context";
 import { useEffect } from "react";
 
 const tableSchema = z.object({
-    name: z.string().min(1, "Table name is required"),
+    name: z.string().min(1, "Table name is required").max(20, "Table name must be 20 characters or less"),
     maxGuests: z.number().int().min(1, "Must be at least 1").max(20, "Must be at most 20"),
     areaId: z.string().nullish(),
 });

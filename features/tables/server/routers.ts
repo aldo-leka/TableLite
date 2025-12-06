@@ -6,7 +6,7 @@ export const tablesRouter = createTRPCRouter({
     create: protectedProcedure
         .input(z.object({
             restaurantId: z.string(),
-            name: z.string().min(1),
+            name: z.string().min(1).max(20),
             maxGuests: z.number().int().min(1).max(20),
             areaId: z.string().nullish(),
         }))
