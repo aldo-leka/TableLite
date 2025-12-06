@@ -35,8 +35,12 @@ import { useEffect } from "react";
 
 const tableSchema = z.object({
     name: z.string().min(1, "Table name is required").max(20, "Table name must be 20 characters or less"),
+    minGuests: z.number().int().min(1, "Must be at least 1").max(20, "Must be at most 20"),
     maxGuests: z.number().int().min(1, "Must be at least 1").max(20, "Must be at most 20"),
     areaId: z.string().nullish(),
+}).refine((data) => data.minGuests <= data.maxGuests, {
+    message: "Min guests cannot be more than max guests",
+    path: ["minGuests"],
 });
 
 type TableFormValues = z.infer<typeof tableSchema>;
@@ -44,6 +48,7 @@ type TableFormValues = z.infer<typeof tableSchema>;
 interface Table {
     id: string;
     name: string;
+    minGuests: number;
     maxGuests: number;
     areaId: string | null;
 }
@@ -85,6 +90,7 @@ export const Modal = ({
         resolver: zodResolver(tableSchema),
         defaultValues: {
             name: table?.name || "",
+            minGuests: table?.minGuests || 1,
             maxGuests: table?.maxGuests || 4,
             areaId: table?.areaId || defaultAreaId || null,
         },
@@ -94,6 +100,7 @@ export const Modal = ({
         if (open) {
             form.reset({
                 name: table?.name || getNextTableNumber(),
+                minGuests: table?.minGuests || 1,
                 maxGuests: table?.maxGuests || 4,
                 areaId: table?.areaId || defaultAreaId || null,
             });
@@ -105,6 +112,7 @@ export const Modal = ({
             await updateTable.mutateAsync({
                 id: table.id,
                 name: values.name,
+                minGuests: values.minGuests,
                 maxGuests: values.maxGuests,
                 areaId: values.areaId,
             });
@@ -112,6 +120,7 @@ export const Modal = ({
             await createTable.mutateAsync({
                 restaurantId: restaurant.id,
                 name: values.name,
+                minGuests: values.minGuests,
                 maxGuests: values.maxGuests,
                 areaId: values.areaId,
             });
@@ -149,6 +158,25 @@ export const Modal = ({
                                             <Input
                                                 placeholder="1"
                                                 {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="minGuests"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Min Guests</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min={1}
+                                                max={20}
+                                                {...field}
+                                                onChange={(e) => field.onChange(parseInt(e.target.value))}
                                             />
                                         </FormControl>
                                         <FormMessage />

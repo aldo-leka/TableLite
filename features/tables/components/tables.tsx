@@ -6,7 +6,7 @@ import {
     ErrorView,
     LoadingView,
 } from "@/components/entity-components";
-import { useCreateTable, useSuspenseTables } from "../hooks/use-tables";
+import { useSuspenseTables } from "../hooks/use-tables";
 import {
     Empty,
     EmptyContent,
@@ -59,8 +59,8 @@ const TableCard = ({ table, onClick }: { table: Table; onClick: () => void }) =>
                         {table.name}
                     </span>
                     <div className="absolute bottom-2 left-2 flex items-center gap-1 text-xs">
-                        <span>{table.maxGuests}</span>
                         <Users className="size-4" />
+                        <span>{table.minGuests}-{table.maxGuests}</span>
                     </div>
                 </button>
             </TooltipTrigger>

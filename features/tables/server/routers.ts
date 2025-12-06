@@ -7,8 +7,12 @@ export const tablesRouter = createTRPCRouter({
         .input(z.object({
             restaurantId: z.string(),
             name: z.string().min(1).max(20),
+            minGuests: z.number().int().min(1).max(20),
             maxGuests: z.number().int().min(1).max(20),
             areaId: z.string().nullish(),
+        }).refine((data) => data.minGuests <= data.maxGuests, {
+            message: "Min guests cannot be greater than max guests",
+            path: ["minGuests"],
         }))
         .mutation(({ ctx, input }) => {
             // Makes sure restaurant belongs to user
@@ -22,6 +26,7 @@ export const tablesRouter = createTRPCRouter({
             return prisma.table.create({
                 data: {
                     name: input.name,
+                    minGuests: input.minGuests,
                     maxGuests: input.maxGuests,
                     restaurantId: input.restaurantId,
                     areaId: input.areaId,
@@ -50,8 +55,12 @@ export const tablesRouter = createTRPCRouter({
         .input(z.object({
             id: z.string(),
             name: z.string().min(1),
+            minGuests: z.number().int().min(1).max(20),
             maxGuests: z.number().int().min(1).max(20),
             areaId: z.string().nullish(),
+        }).refine((data) => data.minGuests <= data.maxGuests, {
+            message: "Min guests cannot be greater than max guests",
+            path: ["minGuests"],
         }))
         .mutation(({ ctx, input }) => {
             prisma.table.findUniqueOrThrow({
@@ -67,6 +76,7 @@ export const tablesRouter = createTRPCRouter({
                 where: { id: input.id },
                 data: {
                     name: input.name,
+                    minGuests: input.minGuests,
                     maxGuests: input.maxGuests,
                     areaId: input.areaId,
                 },
