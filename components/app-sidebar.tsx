@@ -20,6 +20,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
 import { useHasPurchased } from "@/features/payments/hooks/use-payment";
@@ -66,6 +67,7 @@ export const AppSidebar = () => {
     const { data: restaurants } = useSuspenseRestaurants();
     const menuItems = getMenuItems(restaurant.slug);
     const { data: session } = authClient.useSession();
+    const { isMobile, setOpenMobile } = useSidebar();
 
     return (
         <Sidebar collapsible="icon">
@@ -76,8 +78,13 @@ export const AppSidebar = () => {
                         className="gap-x-4 h-10 px-4"
                     >
                         <Link
-                            href="/"
+                            href={`/dashboard/${restaurant.slug}/reservations`}
                             prefetch
+                            onClick={() => {
+                                if (isMobile) {
+                                    setOpenMobile(false);
+                                }
+                            }}
                         >
                             <Image
                                 src="/logos/logo.svg"
@@ -112,6 +119,11 @@ export const AppSidebar = () => {
                                             <Link
                                                 href={item.url}
                                                 prefetch
+                                                onClick={() => {
+                                                    if (isMobile) {
+                                                        setOpenMobile(false);
+                                                    }
+                                                }}
                                             >
                                                 <item.icon className="size-4" />
                                                 <span>{item.title}</span>
